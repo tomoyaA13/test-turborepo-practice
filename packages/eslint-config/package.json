@@ -6,9 +6,11 @@
   "exports": {
     "./base": "./base.js",
     "./next-js": "./next.js",
-    "./react-internal": "./react-internal.js"
+    "./react-internal": "./react-internal.js",
+    "./hono": "./hono.js"
   },
   "devDependencies": {
+    "@hono/eslint-config": "^1.0.0",
     "@next/eslint-plugin-next": "^15.4.5",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
