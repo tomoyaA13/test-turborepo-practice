@@ -48,9 +48,15 @@ importers:
 
   apps/web:
     dependencies:
+      '@apps/server':
+        specifier: workspace:^
+        version: link:../server
       '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      hono:
+        specifier: ^4.8.10
+        version: 4.8.10
       lucide-react:
         specifier: ^0.534.0
         version: 0.534.0(react@19.1.1)
