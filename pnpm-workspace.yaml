@@ -1,3 +1,31 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+catalog:
+  # TypeScript と型定義
+  typescript: 5.8.3
+  "@types/node": ^24.1.0
+  "@types/react": ^19.1.9
+  "@types/react-dom": ^19.1.7
+  
+  # React エコシステム
+  react: ^19.1.1
+  react-dom: ^19.1.1
+  next: ^15.4.5
+  next-themes: ^0.4.6
+  
+  # UI ライブラリ
+  lucide-react: ^0.535.0
+  
+  # サーバーサイド
+  hono: ^4.8.10
+  
+  # 開発ツール
+  eslint: ^9.32.0
+  prettier: ^3.6.2
+  turbo: ^2.5.5
+  
+  # TypeScript ESLint
+  "@typescript-eslint/eslint-plugin": ^8.38.0
+  "@typescript-eslint/parser": ^8.38.0
