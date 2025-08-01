@@ -51,6 +51,9 @@ catalogs:
     typescript:
       specifier: 5.8.3
       version: 5.8.3
+    zod:
+      specifier: ^4.0.14
+      version: 4.0.14
 
 importers:
 
@@ -74,6 +77,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@workspace/validation':
+        specifier: workspace:*
+        version: link:../../packages/validation
       hono:
         specifier: 'catalog:'
         version: 4.8.10
@@ -105,6 +111,9 @@ importers:
       '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@workspace/validation':
+        specifier: workspace:*
+        version: link:../../packages/validation
       hono:
         specifier: 'catalog:'
         version: 4.8.10
@@ -123,6 +132,9 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.1.1(react@19.1.1)
+      zod:
+        specifier: 'catalog:'
+        version: 4.0.14
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -349,6 +361,22 @@ importers:
       tailwindcss:
         specifier: ^4.1.11
         version: 4.1.11
+      typescript:
+        specifier: 'catalog:'
+        version: 5.8.3
+
+  packages/validation:
+    dependencies:
+      zod:
+        specifier: 'catalog:'
+        version: 4.0.14
+    devDependencies:
+      '@workspace/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
