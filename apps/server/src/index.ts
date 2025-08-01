@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { hc } from "hono/client";
 
 const app = new Hono();
 
