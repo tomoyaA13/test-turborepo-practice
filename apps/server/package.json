@@ -2,10 +2,13 @@
   "name": "@apps/server",
   "type": "module",
   "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
+    "build": "tsup ./src/index.ts --dts --format esm",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
@@ -19,6 +22,7 @@
     "@cloudflare/workers-types": "^4.20250731.0",
     "@workspace/eslint-config": "workspace:*",
     "eslint": "^9.32.0",
+    "tsup": "^8.0.0",
     "typescript": "^5.8.3",
     "wrangler": "^4.4.0"
   }
