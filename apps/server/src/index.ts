@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { userSchema } from "@workspace/validation/user";
 
 const app = new Hono();
 

@@ -1,0 +1,28 @@
+{
+  "name": "@workspace/validation",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./user": {
+      "types": "./src/schemas/user.ts",
+      "import": "./src/schemas/user.ts"
+    },
+    "./common": {
+      "types": "./src/schemas/common.ts",
+      "import": "./src/schemas/common.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
