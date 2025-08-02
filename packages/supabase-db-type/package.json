@@ -1,0 +1,29 @@
+{
+  "name": "@workspace/supabase-db-type",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./database-type": {
+      "types": "./dist/database-type.d.ts",
+      "import": "./dist/database-type.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "db:types": "supabase gen types typescript --local > src/database-type.ts"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@workspace/typescript-config": "workspace:*",
+    "react": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
+  }
+}

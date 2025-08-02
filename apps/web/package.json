@@ -13,6 +13,9 @@
   },
   "dependencies": {
     "@apps/server": "workspace:^",
+    "@supabase/ssr": "catalog:",
+    "@supabase/supabase-js": "catalog:",
+    "@workspace/supabase-db-type": "workspace:*",
     "@workspace/ui": "workspace:*",
     "@workspace/validation": "workspace:*",
     "hono": "catalog:",

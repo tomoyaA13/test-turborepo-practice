@@ -1,14 +1,11 @@
-# Cloudflare Workers用のローカル環境変数のサンプル
-# このファイルをコピーして .dev.vars を作成してください
+# Cloudflare Workers用のローカル環境変数
+# 本番環境ではCloudflareダッシュボードで設定してください
 
-# データベース接続情報
-DATABASE_URL=postgresql://user:password@localhost:5432/mydb
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 
 # JWT認証用のシークレットキー
-JWT_SECRET=your-secret-jwt-key-change-this-in-production
-
-# API認証キー
-API_KEY=development-api-key
+JWT_SECRET=
 
 # その他の設定
 ENVIRONMENT=development

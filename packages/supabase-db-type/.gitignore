@@ -1,0 +1,14 @@
+# バックアップファイル
+*.bak
+
+# ビルド成果物
+dist/
+
+# Supabase
+supabase/.branches
+supabase/.temp
+supabase/.env
+supabase/.env.local
+
+# 型定義は自動生成されるのでコミットしない場合はコメントアウトを解除
+# src/types/database-type.ts

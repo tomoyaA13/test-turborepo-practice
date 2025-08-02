@@ -20,11 +20,14 @@
   },
   "dependencies": {
     "@workspace/validation": "workspace:*",
-    "hono": "catalog:"
+    "hono": "catalog:",
+    "@supabase/ssr": "catalog:",
+    "@supabase/supabase-js": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250801.0",
     "@workspace/eslint-config": "workspace:*",
+    "@workspace/supabase-db-type": "workspace:*",
     "eslint": "catalog:",
     "tsup": "^8.5.0",
     "typescript": "catalog:",
