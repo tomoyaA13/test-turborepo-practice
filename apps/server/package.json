@@ -26,6 +26,7 @@
     "@cloudflare/workers-types": "^4.20250801.0",
     "@workspace/eslint-config": "workspace:*",
     "eslint": "catalog:",
+    "supabase": "^2.33.7",
     "tsup": "^8.5.0",
     "typescript": "catalog:",
     "wrangler": "^4.27.0"
