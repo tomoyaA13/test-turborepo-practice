@@ -5,9 +5,6 @@ import { env } from "hono/adapter";
 import { setCookie } from "hono/cookie";
 import type { CookieOptions as HonoCookieOptions } from "hono/utils/cookie";
 
-// https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=framework&framework=hono&queryGroups=environment&environment=server-client&queryGroups=package-manager&package-manager=pnpm
-// 上記のドキュメントを参考にしました。
-
 // Honoの標準CookieOptionsを拡張した型
 type ExtendedCookieOptions = HonoCookieOptions & {
   partitioned?: boolean;
@@ -30,18 +27,31 @@ type SupabaseEnv = {
   SUPABASE_ANON_KEY: string;
 };
 
-// sameSiteの値を変換するヘルパー関数
+/**
+ * sameSiteの値を変換するヘルパー関数
+ *
+ * なぜ必要か：
+ * - Supabase (cookieパッケージ): sameSite?: boolean | "lax" | "strict" | "none"
+ * - Hono: sameSite?: "Strict" | "Lax" | "None" | "strict" | "lax" | "none"
+ *
+ * 主な違い：
+ * 1. Supabaseはboolean型を許可（true = "strict"、false = 属性なし）
+ * 2. 文字列の大文字小文字が異なる可能性がある
+ *
+ * この関数により、Supabaseの値をHonoが期待する形式に安全に変換します。
+ */
 function convertSameSite(
   sameSite: string | boolean | undefined,
 ): HonoCookieOptions["sameSite"] {
   if (!sameSite) return undefined;
 
-  // trueの場合は"Strict"として扱う
+  // boolean型の処理：trueの場合は"Strict"として扱う（RFC 6265bis準拠）
   if (sameSite === true) {
     return "Strict";
   }
 
-  // 文字列の場合は大文字小文字を調整
+  // 文字列の場合は大文字小文字を正規化
+  // Honoは両方受け入れるが、一貫性のため最初の文字を大文字にする
   if (typeof sameSite === "string") {
     const normalized = sameSite.toLowerCase();
     switch (normalized) {
@@ -59,7 +69,21 @@ function convertSameSite(
   return undefined;
 }
 
-// priorityの値を変換するヘルパー関数（Honoが大文字を期待する場合）
+/**
+ * priorityの値を変換するヘルパー関数
+ *
+ * なぜ必要か：
+ * - Supabase (cookieパッケージ): priority?: "low" | "medium" | "high" (小文字のみ)
+ * - Hono: priority?: "Low" | "Medium" | "High" | "low" | "medium" | "high" (両方)
+ *
+ * Honoは大文字小文字の両方を受け入れますが、Supabaseからは小文字のみが来ます。
+ * この関数で一貫性のため、最初の文字を大文字に変換します。
+ *
+ * Priority属性はChrome独自の拡張で、クッキーの優先度を制御します：
+ * - Low: 容量制限時に最初に削除される
+ * - Medium: デフォルト
+ * - High: 最後まで保持される
+ */
 function convertPriority(
   priority?: string,
 ): "Low" | "Medium" | "High" | "low" | "medium" | "high" | undefined {
@@ -74,7 +98,7 @@ function convertPriority(
     case "high":
       return "High";
     default:
-      // 大文字小文字の両方に対応
+      // 予期しない値の場合も型アサーションで通す（将来の拡張性のため）
       return priority as "Low" | "Medium" | "High" | "low" | "medium" | "high";
   }
 }
