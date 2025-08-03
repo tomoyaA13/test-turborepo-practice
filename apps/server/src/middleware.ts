@@ -5,7 +5,60 @@ import { env } from "hono/adapter";
 import { setCookie } from "hono/cookie";
 import type { CookieOptions as HonoCookieOptions } from "hono/utils/cookie";
 
-// Honoの標準CookieOptionsを拡張した型
+/**
+ * Honoの標準CookieOptionsを拡張した型定義
+ *
+ * なぜ必要か：
+ * HonoのCookieOptionsには含まれていないが、モダンなブラウザや
+ * Supabaseが対応している追加のクッキー属性を含める必要があるため。
+ *
+ * 追加されたプロパティ：
+ *
+ * 1. partitioned?: boolean
+ *    - CHIPS (Cookies Having Independent Partitioned State) 仕様の一部
+ *    - サードパーティクッキーのプライバシー保護機能
+ *    - trueにすると、クッキーがトップレベルサイトごとに分離される
+ *    - 例: site-a.comに埋め込まれたsite-b.comのクッキーと、
+ *          site-c.comに埋め込まれたsite-b.comのクッキーが別々に管理される
+ *
+ * 2. priority?: "Low" | "Medium" | "High" | "low" | "medium" | "high"
+ *    - Chrome独自の拡張機能（他のブラウザは無視）
+ *    - ブラウザのクッキー容量制限に達した時の削除優先順位を制御
+ *    - Low: 最初に削除される（分析用クッキーなど）
+ *    - Medium: デフォルト
+ *    - High: 最後まで保持される（認証クッキーなど）
+ *
+ * 3. prefix?: "host" | "secure"
+ *    - クッキー名のプレフィックスによるセキュリティ強化
+ *    - "host": __Host- プレフィックスを付与
+ *      • Secure属性が必須
+ *      • Path=/が必須
+ *      • Domainを設定できない（現在のホストのみ）
+ *    - "secure": __Secure- プレフィックスを付与
+ *      • Secure属性が必須
+ *      • HTTPS接続でのみ送信される
+ *
+ * これらの属性により、よりセキュアで柔軟なクッキー管理が可能になります。
+ *
+ * 使用例：
+ * ```typescript
+ * // 認証クッキー（高優先度、セキュアプレフィックス付き）
+ * setCookie(c, "auth-token", token, {
+ *   secure: true,
+ *   httpOnly: true,
+ *   sameSite: "Strict",
+ *   priority: "High",      // 削除されにくい
+ *   prefix: "secure"       // __Secure-auth-token という名前になる
+ * });
+ *
+ * // 分析用クッキー（低優先度、パーティション化）
+ * setCookie(c, "analytics", data, {
+ *   sameSite: "Lax",
+ *   priority: "Low",       // 容量制限時に最初に削除
+ *   partitioned: true      // サイトごとに分離
+ * });
+ * ```
+ */
 type ExtendedCookieOptions = HonoCookieOptions & {
   partitioned?: boolean;
   priority?: "Low" | "Medium" | "High" | "low" | "medium" | "high";
@@ -161,9 +214,12 @@ export const supabaseMiddleware = (): MiddlewareHandler => {
               // 型を明確にして拡張
               const extendedOptions: ExtendedCookieOptions = {
                 ...honoCookieOptions,
+                // CHIPS仕様：クッキーをサイトごとに分離（プライバシー保護）
                 partitioned: options.partitioned,
+                // Chrome限定：クッキーの保持優先度（認証系はHigh推奨）
                 priority: convertPriority(options.priority),
                 // prefixはSerializeOptionsに存在しないので、明示的にチェック
+                // セキュリティ強化：__Host-または__Secure-プレフィックスを付与
                 prefix: (options as any).prefix as
                   | "host"
                   | "secure"
