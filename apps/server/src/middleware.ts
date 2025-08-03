@@ -65,6 +65,8 @@ type ExtendedCookieOptions = HonoCookieOptions & {
   prefix?: "host" | "secure";
 };
 
+// hono パッケージに既に存在する interface ContextVariableMap に、
+// 新しいプロパティ supabase を追加
 declare module "hono" {
   interface ContextVariableMap {
     supabase: SupabaseClient;
