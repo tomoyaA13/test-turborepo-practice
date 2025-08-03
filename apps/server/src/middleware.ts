@@ -5,6 +5,9 @@ import { env } from "hono/adapter";
 import { setCookie } from "hono/cookie";
 import type { CookieOptions as HonoCookieOptions } from "hono/utils/cookie";
 
+// https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=framework&framework=hono&queryGroups=environment&environment=server-client&queryGroups=package-manager&package-manager=pnpm
+// 上記のドキュメントを参考にしました。
+
 // Honoの標準CookieOptionsを拡張した型
 type ExtendedCookieOptions = HonoCookieOptions & {
   partitioned?: boolean;
@@ -58,10 +61,10 @@ function convertSameSite(
 
 // priorityの値を変換するヘルパー関数（Honoが大文字を期待する場合）
 function convertPriority(
-  priority?: string
+  priority?: string,
 ): "Low" | "Medium" | "High" | "low" | "medium" | "high" | undefined {
   if (!priority) return undefined;
-  
+
   const normalized = priority.toLowerCase();
   switch (normalized) {
     case "low":
@@ -137,7 +140,10 @@ export const supabaseMiddleware = (): MiddlewareHandler => {
                 partitioned: options.partitioned,
                 priority: convertPriority(options.priority),
                 // prefixはSerializeOptionsに存在しないので、明示的にチェック
-                prefix: (options as any).prefix as "host" | "secure" | undefined,
+                prefix: (options as any).prefix as
+                  | "host"
+                  | "secure"
+                  | undefined,
               };
 
               setCookie(c, name, value, extendedOptions as any);
