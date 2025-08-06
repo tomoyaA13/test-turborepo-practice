@@ -1,10 +1,23 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": ["NODE_ENV"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "env": [
+        "NEXT_PUBLIC_API_URL",
+        "SUPABASE_*",
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "API_KEY"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "apps/web/.env*",
+        "apps/server/.dev.vars"
+      ],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {
@@ -16,7 +29,19 @@
     "dev": {
       "dependsOn": ["@apps/server#build"],
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": [
+        "NEXT_PUBLIC_*",
+        "SUPABASE_*",
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "PORT"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "apps/web/.env*",
+        "apps/server/.dev.vars"
+      ]
     }
   }
 }
