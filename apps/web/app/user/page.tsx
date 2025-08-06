@@ -1,0 +1,21 @@
+import { Button } from "@workspace/ui/components/button";
+import { honoClient } from "@/lib/hono-rpc-client";
+
+export default async function Page() {
+  const res = await honoClient.api.user.$get();
+
+  console.log(res);
+
+  if (res.ok) {
+    const textData = await res.text();
+    console.log(textData);
+    return (
+      <div className="flex items-center justify-center min-h-svh">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <h1 className="text-2xl font-bold">{textData}</h1>
+          <Button size="sm">Button</Button>
+        </div>
+      </div>
+    );
+  }
+}
