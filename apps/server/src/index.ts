@@ -3,7 +3,7 @@ import { userSchema } from "@workspace/validation/user";
 import {
   getSupabase,
   supabaseMiddleware,
-} from "./adapter/in/web/middleware/auth.middleware";
+} from "./adapter/in/web/middleware/supabase-middleware";
 
 // 環境変数の型定義
 type Bindings = {
