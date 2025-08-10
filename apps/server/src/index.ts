@@ -1,6 +1,9 @@
 import { Hono } from "hono";
 import { userSchema } from "@workspace/validation/user";
-import { getSupabase, supabaseMiddleware } from "./middleware/auth.middleware";
+import {
+  getSupabase,
+  supabaseMiddleware,
+} from "./adapter/in/web/middleware/auth.middleware";
 
 // 環境変数の型定義
 type Bindings = {
