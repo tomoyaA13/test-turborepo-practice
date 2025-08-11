@@ -1,19 +1,26 @@
 import { z } from "@hono/zod-openapi";
 
-// ユーザー関連のスキーマ
-export const userSchema = z.object({
-  id: z.uuid(),
-  name: z.string().min(1, "Name is required"),
-  email: z.email("Invalid email address"),
-  age: z.number().positive().optional(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
+export const userSchema = z
+  .object({
+    id: z.uuid(),
+    name: z.string().min(1, "Name is required"),
+    email: z.email("Invalid email address"),
+    password: z
+      .string()
+      .min(8, "パスワードは8文字以上必要です")
+      .regex(/[A-Z]/, "大文字を1文字以上含めてください")
+      .regex(/[a-z]/, "小文字を1文字以上含めてください")
+      .regex(/[0-9]/, "数字を1文字以上含めてください")
+      .regex(/[^A-Za-z0-9]/, "特殊文字を1文字以上含めてください"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "パスワードが一致しません",
+    path: ["confirmPassword"], // エラーメッセージをconfirmPasswordフィールドに表示
+  });
 
 export const createUserSchema = userSchema.omit({
   id: true,
-  createdAt: true,
-  updatedAt: true,
 });
 
 export const updateUserSchema = createUserSchema.partial();
