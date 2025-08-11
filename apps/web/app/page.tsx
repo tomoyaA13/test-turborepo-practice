@@ -16,7 +16,9 @@ export default async function Page() {
           <h1 className="text-2xl font-bold">{textData}</h1>
           <Button size="sm">Button</Button>
         </div>
-        <Link href={"/apps/web/app/(auth)/register/page.tsx"}>Register</Link>
+        <Button>
+          <Link href={"/register"}>Register</Link>
+        </Button>
       </div>
     );
   }
