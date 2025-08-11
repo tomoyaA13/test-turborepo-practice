@@ -1,5 +1,6 @@
 import { Button } from "@workspace/ui/components/button";
 import { honoClient } from "@/lib/hono-rpc-client";
+import Link from "next/link";
 
 export default async function Page() {
   const res = await honoClient.hello.$get();
@@ -15,6 +16,7 @@ export default async function Page() {
           <h1 className="text-2xl font-bold">{textData}</h1>
           <Button size="sm">Button</Button>
         </div>
+        <Link href={"/apps/web/app/(auth)/register/page.tsx"}>Register</Link>
       </div>
     );
   }
