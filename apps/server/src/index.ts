@@ -1,9 +1,10 @@
 import { Hono } from "hono";
-import { userSchema } from "@workspace/validation/user";
 import {
   getSupabase,
   supabaseMiddleware,
 } from "./adapter/in/web/middleware/supabase-middleware";
+import { zValidator } from "@hono/zod-validator";
+import { createUserSchema } from "@workspace/validation/user";
 
 // 環境変数の型定義
 type Bindings = {
@@ -21,6 +22,7 @@ app.use("*", supabaseMiddleware());
 // 基本的なルート
 const route = app
   .get("/hello", (c) => c.text("Hello Cloudflare Workers!"))
+
   // 環境変数の使用例
   .get("/api/status", (c) => {
     const environment = c.env.ENVIRONMENT || "production";
@@ -31,7 +33,7 @@ const route = app
       hasAuth: !!c.env.JWT_SECRET,
     });
   })
-  .get("/api/user", async (c) => {
+  .get("/api/users", async (c) => {
     const supabase = getSupabase(c);
     const { data, error } = await supabase.auth.getUser();
 
@@ -45,6 +47,17 @@ const route = app
     return c.json({
       message: "You are logged in!",
       userId: data.user,
+    });
+  })
+  .post("/api/v1/users", zValidator("form", createUserSchema), async (c) => {
+    const validated = c.req.valid("form");
+    const { name, email } = validated;
+
+    const supabase = getSupabase(c);
+
+    const { data, error } = await supabase.auth.signUp({
+      email: "example@email.com",
+      password: "example-password",
     });
   });
 

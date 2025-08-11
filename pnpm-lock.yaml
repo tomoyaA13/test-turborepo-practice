@@ -83,6 +83,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@hono/zod-validator':
+        specifier: ^0.7.2
+        version: 0.7.2(hono@4.8.10)(zod@4.0.14)
       '@scalar/hono-api-reference':
         specifier: ^0.9.13
         version: 0.9.13(hono@4.8.10)

@@ -19,6 +19,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.7.2",
     "@scalar/hono-api-reference": "^0.9.13",
     "@supabase/ssr": "catalog:",
     "@supabase/supabase-js": "catalog:",
