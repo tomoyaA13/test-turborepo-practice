@@ -1,8 +1,7 @@
 import { z } from "@hono/zod-openapi";
 
-export const userSchema = z
+export const createUserSchema = z
   .object({
-    id: z.uuid(),
     name: z.string().min(1, "Name is required"),
     email: z.email("Invalid email address"),
     password: z
@@ -19,13 +18,5 @@ export const userSchema = z
     path: ["confirmPassword"], // エラーメッセージをconfirmPasswordフィールドに表示
   });
 
-export const createUserSchema = userSchema.omit({
-  id: true,
-});
-
-export const updateUserSchema = createUserSchema.partial();
-
 // 型のエクスポート
-export type User = z.infer<typeof userSchema>;
-export type CreateUser = z.infer<typeof createUserSchema>;
-export type UpdateUser = z.infer<typeof updateUserSchema>;
+export type createUserType = z.infer<typeof createUserSchema>;

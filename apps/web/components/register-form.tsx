@@ -15,8 +15,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
-import { createUserSchema } from "@workspace/validation/user";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { createUserSchema } from "@workspace/validation/user";
 
 interface RegisterFormProps {
   onSubmit: (data: z.infer<typeof createUserSchema>) => Promise<void>;
