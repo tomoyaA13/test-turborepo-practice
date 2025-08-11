@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@hono/zod-openapi";
 
 // ユーザー関連のスキーマ
 export const userSchema = z.object({

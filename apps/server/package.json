@@ -19,10 +19,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@workspace/validation": "workspace:*",
-    "hono": "catalog:",
+    "@scalar/hono-api-reference": "^0.9.13",
     "@supabase/ssr": "catalog:",
-    "@supabase/supabase-js": "catalog:"
+    "@supabase/supabase-js": "catalog:",
+    "@workspace/validation": "workspace:*",
+    "hono": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250801.0",

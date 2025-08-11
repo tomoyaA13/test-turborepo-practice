@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@apps/server": "workspace:^",
+    "@hookform/resolvers": "^5.2.1",
     "@supabase/ssr": "catalog:",
     "@supabase/supabase-js": "catalog:",
     "@workspace/supabase-db-type": "workspace:*",
@@ -24,6 +25,7 @@
     "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-hook-form": "^7.61.1",
     "zod": "catalog:"
   },
   "devDependencies": {
