@@ -49,16 +49,30 @@ const route = app
       userId: data.user,
     });
   })
-  .post("/api/v1/users", zValidator("form", createUserSchema), async (c) => {
-    const validated = c.req.valid("form");
-    const { name, email } = validated;
+  .post("/api/v1/users", zValidator("json", createUserSchema), async (c) => {
+    const validated = c.req.valid("json");
+    const { password, email, name } = validated;
 
     const supabase = getSupabase(c);
 
-    const { data, error } = await supabase.auth.signUp({
-      email: "example@email.com",
-      password: "example-password",
+    const { data, error } = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: {
+        data: {
+          name,
+        },
+      },
     });
+
+    if (error) {
+      return c.json({ error: error.message }, 400);
+    }
+
+    return c.json({ 
+      message: "User registered successfully",
+      userId: data.user?.id,
+    }, 201);
   });
 
 export default app;
