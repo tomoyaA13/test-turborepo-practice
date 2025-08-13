@@ -13,21 +13,38 @@ type Bindings = {
   JWT_SECRET: string;
   API_KEY: string;
   ENVIRONMENT?: string;
+  CORS_ORIGIN?: string; // CORS用のオリジンを追加
 };
 
 // 型付きHonoアプリケーションの作成
 const app = new Hono<{ Bindings: Bindings }>();
 
-// CORS設定を追加
-app.use(
-  "/api/*",
-  cors({
-    origin: "http://localhost:3000",
+// CORS設定を追加（環境変数対応）
+app.use("/api/*", async (c, next) => {
+  const corsMiddleware = cors({
+    origin: (origin) => {
+      // 許可するオリジンのリスト
+      const allowedOrigins = [
+        c.env.CORS_ORIGIN,
+        "http://localhost:3000",
+        "http://localhost:3001", // テスト用
+      ].filter(Boolean);
+
+      // オリジンが許可リストに含まれているかチェック
+      if (allowedOrigins.includes(origin)) {
+        return origin;
+      }
+
+      // デフォルトのオリジンを返す
+      return allowedOrigins[0];
+    },
     allowHeaders: ["Content-Type", "Authorization"],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
-  }),
-);
+    maxAge: 3600, // 1時間キャッシュ
+  });
+  return corsMiddleware(c, next);
+});
 
 app.use("*", supabaseMiddleware());
 
