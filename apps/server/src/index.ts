@@ -5,6 +5,7 @@ import {
 } from "./adapter/in/web/middleware/supabase-middleware";
 import { zValidator } from "@hono/zod-validator";
 import { createUserSchema } from "@workspace/validation/user";
+import { cors } from "hono/cors";
 
 // 環境変数の型定義
 type Bindings = {
@@ -16,6 +17,17 @@ type Bindings = {
 
 // 型付きHonoアプリケーションの作成
 const app = new Hono<{ Bindings: Bindings }>();
+
+// CORS設定を追加
+app.use(
+  "/api/*",
+  cors({
+    origin: "http://localhost:3000",
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  }),
+);
 
 app.use("*", supabaseMiddleware());
 
@@ -55,8 +67,8 @@ const route = app
 
     const supabase = getSupabase(c);
 
-    const { data, error } = await supabase.auth.signUp({ 
-      email, 
+    const { data, error } = await supabase.auth.signUp({
+      email,
       password,
       options: {
         data: {
@@ -69,10 +81,13 @@ const route = app
       return c.json({ error: error.message }, 400);
     }
 
-    return c.json({ 
-      message: "User registered successfully",
-      userId: data.user?.id,
-    }, 201);
+    return c.json(
+      {
+        message: "User registered successfully",
+        userId: data.user?.id,
+      },
+      201,
+    );
   });
 
 export default app;

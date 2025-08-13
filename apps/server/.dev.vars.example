@@ -9,3 +9,5 @@ JWT_SECRET=
 
 # その他の設定
 ENVIRONMENT=development
+
+CORS_ORIGIN=http://localhost:3000
